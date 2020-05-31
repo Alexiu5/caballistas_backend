@@ -8,6 +8,12 @@ function getInformacionClienteByDocumento(request, response) {
             return response.json(usuario);
         });
 }
+function getUsuarioById(request, response) {
+    return registerService.findUserById(request.params)
+        .then(usuario => {
+            return response.json(usuario);
+        });
+}
 
 function getInformacionClienteByEmail(request, response) {
     registerService.findUserByEmail(request.params)
@@ -17,12 +23,20 @@ function getInformacionClienteByEmail(request, response) {
 }
 
 function registerUser(req, res){
-    return registerService.registerUser2(req.body);
+    return registerService.registerUser(req.body)
+        .then(resultado => res.status(200).send(resultado));
+}
+
+function finalizarRegistro(req, res){
+    return registerService.updateUsuarioSistema(req.body)
+        .then(resultado => res.status(200).send(resultado));
 }
 
 
 module.exports = {
     getInformacionClienteByDocumento,
     getInformacionClienteByEmail,
-    registerUser
+    registerUser,
+    finalizarRegistro,
+    getUsuarioById
 }
