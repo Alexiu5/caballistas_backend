@@ -3,10 +3,10 @@ const express = require('express');
 const database = require('../database')
 
 // validar se los datos ingresados existen en la base de datos
-function login(params) {
-  let query = 'SELECT * FROM USUARIO_SISTEMA WHERE CORREO = $1 AND CONTRASENA = $2';
-  let {correo, contrasena} = params.datos,
-  values = [correo, contrasena]
+function cambiarContrasena(params) {
+  let query = 'UPDATE USUARIO_SISTEMA SET CONTRASENA = $2 WHERE ID_USUARIO  = $1';
+  let {id_usuario, contrasena} = params,
+  values = [id_usuario, contrasena]
   return database.query(query, values)
     .then(response => {
       return response.rows[0];
@@ -15,5 +15,5 @@ function login(params) {
 }
 
 module.exports = {
-  login,
+  cambiarContrasena,
 }

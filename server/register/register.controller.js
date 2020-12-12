@@ -3,20 +3,66 @@
 const registerService = require('./register.service');
 
 function getInformacionClienteByDocumento(request, response) {
-    return registerService.findUserByDocument(request, response);
+    return registerService.findUserByDocument(request.params)
+        .then(usuario => {
+            return response.json(usuario);
+        });
+}
+function getUsuarioById(request, response) {
+    return registerService.findUserById(request.params)
+        .then(usuario => {
+            return response.json(usuario);
+        });
 }
 
 function getInformacionClienteByEmail(request, response) {
-    return registerService.findUserByEmail(request, response);
+    registerService.findUserByEmail(request.params)
+        .then(cliente => {
+            response.json(cliente);
+        });
 }
 
-function registerUser(req, res){
-    return registerService.registerUser2(req, res);
+function registerUser(req, res) {
+    return registerService.registerUser(req.body)
+        .then(resultado => res.status(200).send(resultado))
+        .catch(err => {
+            res.status(404).send(err);
+        })
 }
 
+function finalizarRegistro(req, res) {
+    return registerService.updateUsuarioSistema(req.body)
+        .then(resultado => res.status(200).send(resultado));
+}
+
+function getInfoUsuario(request, response) {
+    return registerService.findUsers()
+        .then(usuario => {
+            return response.json(usuario);
+        });
+}
+
+function deleteInfo(request, response) {
+    return registerService.deleteUserById(request.params)
+        .then(usuario => {
+            return response.json(usuario);
+        });
+}
+
+function updateInfoUser(request, response) {
+    return registerService.updateUsuarioSistemaByCliente(request.body)
+        .then(usuario => {
+            return response.json(usuario);
+        });
+}
 
 module.exports = {
     getInformacionClienteByDocumento,
     getInformacionClienteByEmail,
-    registerUser
+    registerUser,
+    finalizarRegistro,
+    getUsuarioById,
+    getInfoUsuario,
+    deleteInfo,
+    updateInfoUser
 }
